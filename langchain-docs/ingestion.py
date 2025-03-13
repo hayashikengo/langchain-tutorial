@@ -31,6 +31,37 @@ def ingest_docs():
     )
     print("****Loading to vectorstore done ****")
 
+def ingest_docs2() -> None:
+    from langchain_community.document_loaders import FireCrawlLoader
+
+    langchain_documents_base_urls = [
+        "https://python.langchain.com/docs/integrations/chat/",
+        "https://python.langchain.com/docs/integrations/retrievers/",
+        "https://python.langchain.com/docs/integrations/tools/",
+        "https://python.langchain.com/docs/integrations/document_loaders/",
+        "https://python.langchain.com/docs/integrations/vectorstores/",
+        "https://python.langchain.com/docs/integrations/text_embedding/",
+    ]
+
+    for url in langchain_documents_base_urls:
+        print(f"FireCrawling {url=}")
+        loader = FireCrawlLoader(
+            url=url,
+            mode="crawl",
+            params={
+                "crawlerOptions": {"limit": 5},
+                "pageOptions": {"onlyMainContent": True},
+                "wait_until_done": True,
+            }
+        )
+        docs = loader.load()
+
+        print(f"Adding {len(docs)} documents from {url} to Pinecone")
+        PineconeVectorStore.from_documents(
+            docs, embeddings, index_name="firecrawl-index"
+        )
+        print(f"Added {len(docs)} documents from {url} to Pinecone")
+
 
 if __name__ == "__main__":
-    ingest_docs()
+    ingest_docs2()

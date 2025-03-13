@@ -18,13 +18,13 @@ streamlit-chat = "*"
 tqdm = "*"
 isort = "*"
 langchainhub = "*"
-firecrawl-py = "*"
 langchain-community = "*"
 langsmith = "*"
 pinecone = "*"
 pillow = "*"
 langchain-openai = "*"
 langchain-pinecone = "*"
+firecrawl-py = "*"
 
 [dev-packages]
 
